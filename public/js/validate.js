@@ -1,3 +1,14 @@
+/**
+ * ---------------------------------------------------------
+ * Nom du fichier : validate.js
+ * Projet         : Pizzeria (Lab 4)
+ * Description    : Scripts front-end pour validation
+ *                  des formulaires (Bootstrap-like).
+ * Auteur         : Sami Abdelkhalek
+ * ---------------------------------------------------------
+ */
+
+
 // Validation Bootstrap + pré-remplissage par téléphone + lien historique
 (function () {
   const form = document.getElementById('orderForm');
@@ -64,12 +75,80 @@
       if (info) info.textContent = 'Aucun historique pour ce numéro.';
     }
   }
-
+  
   const phoneInput = document.getElementById('phone');
   if (phoneInput) {
     phoneInput.addEventListener('change', onPhoneChanged);
     phoneInput.addEventListener('blur', onPhoneChanged);
     // Appel initial si un numéro est déjà présent (retour de validation)
     if (phoneInput.value) onPhoneChanged();
+  }
+})();
+// Validation Bootstrap + messages FR + message de groupe (pizza) + préremplissage téléphone (si déjà en place)
+(function () {
+  const form = document.getElementById('orderForm');
+
+  // --- Active Bootstrap client-side validation
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      // Handle radio group "pizza" → message groupé
+      const radios = form.querySelectorAll('input[name="pizza"]');
+      const pizzaInvalid = document.getElementById('pizzaInvalid');
+      const anyChecked = Array.from(radios).some(r => r.checked);
+
+      if (!anyChecked) {
+        // on “force” une invalidité sur le 1er pour que checkValidity() échoue
+        if (radios[0]) radios[0].setCustomValidity('Choisir une sorte de pizza.');
+        if (pizzaInvalid) pizzaInvalid.style.display = 'block';
+      } else {
+        if (radios[0]) radios[0].setCustomValidity('');
+        if (pizzaInvalid) pizzaInvalid.style.display = 'none';
+      }
+
+      if (!form.checkValidity()) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      form.classList.add('was-validated');
+    });
+
+    // Quand on change de radio → masquer l'erreur groupe
+    form.addEventListener('change', (ev) => {
+      if (ev.target && ev.target.name === 'pizza') {
+        const radios = form.querySelectorAll('input[name="pizza"]');
+        const pizzaInvalid = document.getElementById('pizzaInvalid');
+        const anyChecked = Array.from(radios).some(r => r.checked);
+        if (radios[0]) radios[0].setCustomValidity(anyChecked ? '' : 'Choisir une sorte de pizza.');
+        if (pizzaInvalid) pizzaInvalid.style.display = anyChecked ? 'none' : 'block';
+      }
+    });
+  }
+
+  // --- (Optionnel) messages FR pour quelques patterns courants
+  const postal = document.getElementById('postal');
+  if (postal) {
+    postal.addEventListener('input', () => postal.setCustomValidity(''));
+    postal.addEventListener('invalid', () => {
+      if (postal.validity.valueMissing) postal.setCustomValidity('Ce champ est requis.');
+      else postal.setCustomValidity('Format attendu : A1A1A1 (ex. H2X1Y4).');
+    });
+  }
+
+  const phone = document.getElementById('phone');
+  if (phone) {
+    phone.addEventListener('input', () => phone.setCustomValidity(''));
+    phone.addEventListener('invalid', () => {
+      if (phone.validity.valueMissing) phone.setCustomValidity('Ce champ est requis.');
+      else phone.setCustomValidity('Téléphone invalide (ex. (514) 555-0123).');
+    });
+  }
+
+  const email = document.getElementById('email');
+  if (email) {
+    email.addEventListener('input', () => email.setCustomValidity(''));
+    email.addEventListener('invalid', () => {
+      if (email.validity.valueMissing) email.setCustomValidity('Ce champ est requis.');
+      else email.setCustomValidity('Adresse courriel invalide.');
+    });
   }
 })();

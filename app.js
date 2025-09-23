@@ -1,3 +1,12 @@
+/**
+ * ---------------------------------------------------------
+ * Nom du fichier : app.js
+ * Projet         : Pizzeria (Lab 4)
+ * Description    : Point d’entrée du serveur Express,
+ *                  configuration des routes et middleware.
+ * Auteur         : Sami Abdelkhalek
+ * ---------------------------------------------------------
+ */
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
