@@ -1,0 +1,129 @@
+<% const err = (name) => errors && errors[name] ? errors[name].msg : null; %>
+<% const oldv = (name, d='') => old && old[name] !== undefined ? old[name] : d; %>
+
+<div class="row">
+  <div class="col-lg-10 col-xl-8 mx-auto">
+    <h1 class="mb-3">Commander une pizza</h1>
+    <p class="text-muted">Remplissez le formulaire. Les champs invalides seront surlignés.</p>
+
+    <form id="orderForm" method="post" action="/commander" novalidate>
+      <!-- Sorte de pizza -->
+      <fieldset class="mb-3">
+        <legend class="form-label">Sorte de pizza</legend>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="pizza" id="p1" value="hawaiienne" <%= oldv('pizza')==='hawaiienne'?'checked':'' %> required>
+          <label class="form-check-label" for="p1">Hawaïenne – 7.00$</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="pizza" id="p2" value="alldressed" <%= oldv('pizza')==='alldressed'?'checked':'' %> required>
+          <label class="form-check-label" for="p2">All-dressed – 8.10$</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="pizza" id="p3" value="sicilienne" <%= oldv('pizza')==='sicilienne'?'checked':'' %> required>
+          <label class="form-check-label" for="p3">Sicilienne – 6.30$</label>
+        </div>
+        <% if (err('pizza')) { %><div class="form-error"><%= err('pizza') %></div><% } %>
+      </fieldset>
+
+      <!-- Quantité + Taille -->
+      <div class="row g-3 mb-3">
+        <div class="col-sm-6">
+          <label class="form-label" for="qty">Quantité</label>
+          <input type="number" class="form-control <%= err('qty')? 'is-invalid':'' %>" id="qty" name="qty" min="1" max="99" value="<%= oldv('qty',1) %>" required>
+          <% if (err('qty')) { %><div class="form-error"><%= err('qty') %></div><% } %>
+        </div>
+        <div class="col-sm-6">
+          <label class="form-label" for="size">Taille</label>
+          <select id="size" name="size" class="form-select <%= err('size')? 'is-invalid':'' %>" required>
+            <option value="" disabled <%= oldv('size')? '' : 'selected' %>>Choisir…</option>
+            <option value="small"  <%= oldv('size')==='small'?'selected':'' %>>Small (×0.8)</option>
+            <option value="medium" <%= oldv('size')==='medium'?'selected':'' %>>Medium (×1.0)</option>
+            <option value="large"  <%= oldv('size')==='large'?'selected':'' %>>Large (×1.2)</option>
+          </select>
+          <% if (err('size')) { %><div class="form-error"><%= err('size') %></div><% } %>
+        </div>
+      </div>
+
+      <!-- Ingrédients supplémentaires -->
+      <fieldset class="mb-3">
+        <legend class="form-label">Ingrédients supplémentaires (+0.50$ chacun)</legend>
+        <div class="row g-3">
+          <% const EXTRAS = ['Olives', 'Champignons', 'Oignons', 'Piments', 'Fromage extra', 'Pepperoni extra']; %>
+          <% EXTRAS.forEach((x,i)=>{ %>
+            <div class="col-sm-6 col-md-4">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="extras" id="ex<%= i %>" value="<%= x %>" <%= (old.extras||[]).includes(x)?'checked':'' %>>
+                <label class="form-check-label" for="ex<%= i %>"><%= x %></label>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      </fieldset>
+
+      <!-- Adresse & Code postal -->
+      <div class="mb-3">
+        <label for="address" class="form-label">Adresse (livraison)</label>
+        <textarea id="address" name="address" class="form-control <%= err('address')? 'is-invalid':'' %>" rows="3" required><%= oldv('address') %></textarea>
+        <% if (err('address')) { %><div class="form-error"><%= err('address') %></div><% } %>
+      </div>
+      <div class="mb-3">
+        <label for="postal" class="form-label">Code postal (A1A1A1)</label>
+        <input id="postal" name="postal" type="text" class="form-control <%= err('postal')? 'is-invalid':'' %>" placeholder="H2X1Y4" value="<%= oldv('postal') %>" pattern="^[A-Za-z]\d[A-Za-z]\d[A-Za-z]\d$" required>
+        <% if (err('postal')) { %><div class="form-error"><%= err('postal') %></div><% } %>
+      </div>
+
+      <!-- Client -->
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label" for="firstname">Prénom</label>
+          <input id="firstname" name="firstname" type="text" class="form-control <%= err('firstname')? 'is-invalid':'' %>" value="<%= oldv('firstname') %>" required>
+          <% if (err('firstname')) { %><div class="form-error"><%= err('firstname') %></div><% } %>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label" for="lastname">Nom</label>
+          <input id="lastname" name="lastname" type="text" class="form-control <%= err('lastname')? 'is-invalid':'' %>" value="<%= oldv('lastname') %>" required>
+          <% if (err('lastname')) { %><div class="form-error"><%= err('lastname') %></div><% } %>
+        </div>
+      </div>
+
+        <div class="col-md-6">
+        <label class="form-label" for="phone">Téléphone</label>
+        <input id="phone" name="phone" type="text"
+                class="form-control <%= err('phone')? 'is-invalid':'' %>"
+                placeholder="(514) 555-0123" value="<%= oldv('phone') %>"
+                pattern="^[0-9()\\-\\s]+$" required>
+        <div class="form-text">
+            Chiffres, espaces, tirets et parenthèses seulement.
+            · <a id="linkHistory" href="/historique">Voir l’historique de ce numéro</a>
+        </div>
+        <div id="phoneInfo" class="small mt-1"></div>
+        <% if (err('phone')) { %><div class="form-error"><%= err('phone') %></div><% } %>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label" for="email">Courriel</label>
+          <input id="email" name="email" type="email" class="form-control <%= err('email')? 'is-invalid':'' %>" value="<%= oldv('email') %>" required>
+          <% if (err('email')) { %><div class="form-error"><%= err('email') %></div><% } %>
+        </div>
+      </div>
+
+      <!-- Paiement -->
+      <div class="mb-4">
+        <label class="form-label" for="paymode">Mode de paiement</label>
+        <select id="paymode" name="paymode" class="form-select <%= err('paymode')? 'is-invalid':'' %>" required>
+          <option value="" disabled <%= oldv('paymode')? '' : 'selected' %>>Choisir…</option>
+          <option value="cash" <%= oldv('paymode')==='cash'?'selected':'' %>>Comptant</option>
+          <option value="debit" <%= oldv('paymode')==='debit'?'selected':'' %>>Débit</option>
+          <option value="credit" <%= oldv('paymode')==='credit'?'selected':'' %>>Crédit</option>
+          <option value="etransfer" <%= oldv('paymode')==='etransfer'?'selected':'' %>>Virement</option>
+        </select>
+        <% if (err('paymode')) { %><div class="form-error"><%= err('paymode') %></div><% } %>
+      </div>
+
+      <div class="d-grid d-sm-flex gap-2">
+        <button class="btn btn-primary btn-lg" type="submit">Envoyer la commande</button>
+        <button class="btn btn-outline-secondary" type="reset">Réinitialiser</button>
+      </div>
+    </form>
+  </div>
+</div>

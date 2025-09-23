@@ -1,0 +1,49 @@
+<h1 class="mb-3">Historique des commandes</h1>
+<p class="mb-3">
+  <a class="btn btn-secondary" href="/">← Retour au menu de commande</a>
+</p>
+
+<form class="row gy-2 gx-2 align-items-end mb-4" method="get" action="/historique">
+  <div class="col-sm-8 col-md-6 col-lg-5">
+    <label class="form-label" for="phone">Numéro de téléphone</label>
+    <input class="form-control" id="phone" name="phone" type="text" placeholder="(514) 555-0123" value="<%= query || '' %>" required>
+  </div>
+  <div class="col-auto">
+    <button class="btn btn-primary" type="submit">Rechercher</button>
+  </div>
+</form>
+
+<% if (query && !result) { %>
+  <div class="alert alert-warning">Aucun client trouvé pour « <code><%= query %></code> ».</div>
+<% } %>
+
+<% if (result) { %>
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title">Client</h5>
+      <p class="mb-1"><strong>Nom</strong> : <%= result.profile.firstname %> <%= result.profile.lastname %></p>
+      <p class="mb-1"><strong>Adresse</strong> : <%= result.profile.address %>, <%= result.profile.postal %></p>
+      <p class="mb-0"><strong>Contact</strong> : <%= result.profile.phone %> · <%= result.profile.email %></p>
+    </div>
+  </div>
+
+  <h2 class="h4">Commandes</h2>
+  <% if (!result.orders.length) { %>
+    <p class="text-muted">Aucune commande pour l’instant.</p>
+  <% } else { %>
+    <div class="list-group">
+      <% result.orders.forEach((o) => { %>
+        <div class="list-group-item">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1"><%= o.qty %> × <%= o.pizza %> (<%= o.size %>)</h5>
+            <small class="text-muted"><%= new Date(o.at).toLocaleString('fr-CA') %></small>
+          </div>
+          <% if (o.extras && o.extras.length) { %>
+            <p class="mb-1">Extras : <%= o.extras.join(', ') %></p>
+          <% } %>
+          <small>Sous-total: $<%= o.price.beforeTaxes %> · Taxes: $<%= o.price.taxes %> · Total: $<%= o.price.total %></small>
+        </div>
+      <% }); %>
+    </div>
+  <% } %>
+<% } %>

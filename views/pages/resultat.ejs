@@ -1,0 +1,30 @@
+<h1 class="mb-4">Résumé de la commande</h1>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <h5 class="card-title"><%= order.qty %> × <%= order.pizza %> (<%= order.size %>)</h5>
+    <% if (order.extras && order.extras.length) { %>
+      <p class="mb-2"><strong>Ingrédients extra :</strong> <%= order.extras.join(', ') %></p>
+    <% } else { %>
+      <p class="mb-2 text-muted">Aucun ingrédient extra</p>
+    <% } %>
+    <hr>
+    <p class="mb-1"><strong>Sous-total (avant taxes)</strong> : <code>$<%= order.price.beforeTaxes %></code></p>
+    <p class="mb-1"><strong>Taxes</strong> : <code>$<%= order.price.taxes %></code></p>
+    <p class="fs-5"><strong>Total</strong> : <code>$<%= order.price.total %></code></p>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">Livraison</h5>
+    <p class="mb-1"><strong>Client</strong> : <%= customer.firstname %> <%= customer.lastname %></p>
+    <p class="mb-1"><strong>Adresse</strong> : <%= customer.address %>, <%= customer.postal %></p>
+    <p class="mb-0"><strong>Contact</strong> : <%= customer.phone %> · <%= customer.email %></p>
+  </div>
+</div>
+
+<p class="mt-4">
+  <a class="btn btn-secondary" href="/">← Nouvelle commande</a>
+  <a class="btn btn-primary" href="/historique?phone=<%= encodeURIComponent(customer.phone) %>">Voir l’historique</a>
+</p>
