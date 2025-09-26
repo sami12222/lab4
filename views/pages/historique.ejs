@@ -28,7 +28,8 @@
       <form class="row gy-2 gx-2 align-items-end mb-4" method="get" action="/historique">
         <div class="col-sm-8 col-md-6 col-lg-5">
           <label class="form-label" for="phone">Numéro de téléphone</label>
-          <input class="form-control" id="phone" name="phone" type="text" placeholder="(514) 555-0123" value="<%= query || '' %>" required>
+         <!--  Ajout d'un pattern pour valider le numéro de téléphone -->
+          <input class="form-control" id="phone" name="phone" type="text" placeholder="(514) 555-0123" value="<%= query || '' %>" pattern="(\+?1\s?)?(\(?\d{3}\)?[\s\-\.]?)\d{3}[\s\-\.]?\d{4}|\d{10}">
         </div>
         <div class="col-auto">
           <button class="btn btn-primary" type="submit">Rechercher</button>
