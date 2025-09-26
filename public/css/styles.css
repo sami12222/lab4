@@ -92,7 +92,6 @@ footer{ padding-bottom: .75rem; }
 /* ----- Barre de navigation claire ----- */
 .navbar {
   background-color: #e0e0e0 !important; /* gris clair */
-  border-radius: 0 0 12px 12px;
   padding: .5rem 1rem;
   box-shadow: 0 2px 6px rgba(0,0,0,.1);
 }
