@@ -140,7 +140,7 @@
               <input id="phone" name="phone" type="text"
                      class="form-control <%= err('phone')? 'is-invalid':'' %>"
                      placeholder="(514) 555-0123" value="<%= oldv('phone') %>"
-                     pattern="^[0-9()\\-\\s]+$" required>
+                     pattern="(\+?1\s?)?(\(?\d{3}\)?[\s\-\.]?)\d{3}[\s\-\.]?\d{4}|\d{10}" required> <!-- Ancien regex:^[0-9()\\-\\s]+$ -->
               <div class="form-text">
                 Chiffres, espaces, tirets et parenthèses seulement.
                 · <a id="linkHistory" href="/historique?<%= 'phone=' + encodeURIComponent(oldv('phone','')) %>">
