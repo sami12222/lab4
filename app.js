@@ -189,12 +189,7 @@ app.get('/historique', (req, res) => {
 
 // 404
 app.use((req, res) => {
-  res.status(404).send(`<!doctype html><meta charset="utf-8">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-<div class="container py-5">
-  <h1 class="display-6">404 – Page inexistante</h1>
-  <p class="mt-3"><a class="btn btn-primary" href="/">← Retour à l’accueil</a></p>
-</div>`);
+  res.status(404).render('pages/404');
 });
 
 app.listen(PORT, () => {

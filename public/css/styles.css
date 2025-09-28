@@ -3,11 +3,13 @@ body { padding-bottom: 56px; }
 :root { --bg-tint: rgba(255,255,255,.85); }
 
 html, body { min-height: 100%; }
-body{
+body
+{
   /* fun pizza background avec voile léger */
   background:
     linear-gradient(0deg, rgba(255,255,255,.7), rgba(255,255,255,.7)),
     url('/img/pizza-bg.png') center/cover no-repeat fixed;
+
 }
 
 /* Contrainte de largeur pour la lisibilité */
@@ -92,6 +94,7 @@ footer{ padding-bottom: .75rem; }
 /* ----- Barre de navigation claire ----- */
 .navbar {
   background-color: #e0e0e0 !important; /* gris clair */
+  border-radius: 0 0 12px 12px;
   padding: .5rem 1rem;
   box-shadow: 0 2px 6px rgba(0,0,0,.1);
 }
@@ -122,5 +125,14 @@ footer{ padding-bottom: .75rem; }
 
 .navbar {
   background-color: #2f3640 !important; /* very dark grey */
+  border-radius: 0px;
   padding: .5rem 1rem;
 }
+
+/* ----- Titres de cartes plus visibles ----- */
+.card-title {
+  font-size: 1.6rem; 
+  font-weight: 900;
+  letter-spacing: .25px;
+}
+
